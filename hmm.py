@@ -3,11 +3,19 @@ from collections import defaultdict
 
 class HMM:
     def __init__(self, pi: dict[str, float], a: dict[str, dict[str, float]], b: dict[str, dict[str, float]]):
-        self.pi = pi
+        if self.is_valid_pi(pi):
+            self.pi = pi
+        else:
+            raise ValueError("pi is invalid")
         self.a = a
         self.b = b
-        self.Q = list(a.keys())
+        self.Q = list(pi.keys())
         self.SIGMA = list(b.keys())
+
+    def is_valid_pi(self, pi: dict[str, float]) -> bool:
+        total = sum(pi.values())
+        return total == 1.0 and all(0.0 <= p <= 1.0 for p in pi.values())
+    
 
     def delta(self, time: int, now_state, output: str, dp) -> tuple[float, str | None]:
         if time == 0:
