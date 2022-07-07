@@ -43,8 +43,8 @@ b = {
     },
 }
 
-Q = ["p", "q", "r"]
-SIGMA = {"0", "1"}
+Q = list(a.keys())
+SIGMA = list(b.keys())
 
 
 def delta(time: int, now_state, output: str, dp) -> tuple[float, str | None]:
