@@ -15,7 +15,6 @@ class HMM:
     def is_valid_pi(self, pi: dict[str, float]) -> bool:
         total = sum(pi.values())
         return total == 1.0 and all(0.0 <= p <= 1.0 for p in pi.values())
-    
 
     def delta(self, time: int, now_state, output: str, dp) -> tuple[float, str | None]:
         if time == 0:
@@ -37,7 +36,7 @@ class HMM:
             ]
             return self.Q[preds.index(max(preds))]
 
-    def viterbi(self, o: str) -> None:
+    def viterbi(self, o: str) -> tuple[float, list[str]]:
         dp = defaultdict(lambda: defaultdict(float))
         bp: defaultdict[int, defaultdict[str, str | None]] = defaultdict(lambda: defaultdict(lambda: None))
 
@@ -64,14 +63,14 @@ class HMM:
             before_state = self.bp(t, before_state, o[t], dp)
 
         ans = ans[::-1]
-        self.print_result(max_prob, ans)
+        return max_prob, ans
 
     def print_result(self, max_prob, ans):
         print(max_prob)
         print("".join(ans))
 
 
-if __name__ == "__main__":
+def main():
     pi = {
         "p": 0.46,
         "q": 0.1,
@@ -111,5 +110,9 @@ if __name__ == "__main__":
 
     hmm = HMM(pi, a, b)
     o = input()
-    hmm.viterbi(o)
-    
+    max_prob, ans = hmm.viterbi(o)
+    hmm.print_result(max_prob, ans)
+
+
+if __name__ == "__main__":
+    main()
